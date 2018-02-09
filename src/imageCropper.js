@@ -35,7 +35,8 @@ function Cropper(options) {
       zoomOut: ' - ',
       fit: '(fit)',
       crop: '[crop]'
-    }
+    },
+    exportType: 'image/jpeg'
   };
 
   // Setup options.
@@ -257,7 +258,7 @@ Cropper.prototype.loadImage = function() {
   // Need to have proper sets of 'Access-Control-Allow-Origin' on the requested resource server.
   xhr.onload = function() {
     self.originalArrayBuffer = this.response;
-    self.originalBase64 = 'data:image/jpeg;base64,' + self.base64ArrayBuffer(this.response);
+    self.originalBase64 = 'data:'+ self.options.exportType +';base64,' + self.base64ArrayBuffer(this.response);
     self.setupImageSRC();
   };
   xhr.open('get', this.originalUrl, true);
@@ -593,7 +594,7 @@ Cropper.prototype.cropHandler = function() {
     );
   }
 
-  var base64 = canvas.toDataURL('image/jpeg');
+  var base64 = canvas.toDataURL(this.options.exportType);
   this.events.triggerHandler('Cropped', base64);
   return base64;
 };
